@@ -17,6 +17,33 @@ export default new Router({
         {
           path: '/polls',
           component: () => import(/* webpackChunkName: "polls" */ './views/Polls.vue'),
+          children: [
+            {
+              path: 'new',
+              component: () => import(/* webpackChunkName: "new-poll" */ './views/NewPoll.vue'),
+              meta: {
+                title: 'Создание нового опроса',
+                icon: 'rate_review',
+              },
+            },
+            {
+              path: 'edit/:id',
+              component: () => import(/* webpackChunkName: "edit-poll" */ './views/EditPoll.vue'),
+              props: true,
+              meta: {
+                title: 'Редактирование опроса',
+                icon: 'rate_review',
+              },
+            },
+            {
+              path: '',
+              component: () => import(/* webpackChunkName: "poll-list" */ './views/PollsList.vue'),
+              meta: {
+                title: 'Опросы',
+                icon: 'rate_review',
+              },
+            },
+          ],
           meta: {
             title: 'Опросы',
             icon: 'rate_review',

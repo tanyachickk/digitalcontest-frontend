@@ -1,10 +1,11 @@
 <template lang="pug">
   div
     page-title
+    div {{ id }}
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import PageTitle from "@/components/PageTitle.vue";
 
 @Component({
@@ -12,5 +13,8 @@ import PageTitle from "@/components/PageTitle.vue";
     PageTitle
   }
 })
-export default class Settings extends Vue {}
+export default class EditPoll extends Vue {
+  @Prop()
+  id!: string;
+}
 </script>

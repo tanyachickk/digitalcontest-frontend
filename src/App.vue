@@ -1,25 +1,23 @@
-<template>
-  <div id="app">
-    <router-view />
-  </div>
+<template lang="pug">
+  .app
+    router-view
 </template>
 
 <style lang="scss">
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:200,300,400,500,600,700,800|Roboto:300&display=swap");
+@import "~material-design-icons/iconfont/material-icons.css";
+@import "reset-css";
+@import "~@/styles/colors";
+
+* {
+  box-sizing: border-box;
 }
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+
+.app {
+  width: 100vw;
+  height: 100vh;
+  background-color: #f5f6f8;
+  font-family: "Open Sans", sans-serif;
+  overflow: hidden;
 }
 </style>
