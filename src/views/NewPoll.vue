@@ -3,7 +3,7 @@
     page-title
     back-to-polls
     .new-poll__body
-      //- poll-editor
+      poll-editor
 </template>
 
 <script lang="ts">
@@ -21,3 +21,11 @@ import PollEditor from "@/components/PollEditor.vue";
 })
 export default class NewPoll extends Vue {}
 </script>
+
+<style lang="scss" scoped>
+.new-poll {
+  &__body {
+    padding: 1.5rem 2rem;
+  }
+}
+</style>

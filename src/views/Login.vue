@@ -16,7 +16,7 @@ import LoginForm from "@/components/LoginForm.vue";
 export default class Login extends Vue {}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .login-page {
   position: relative;
   display: flex;

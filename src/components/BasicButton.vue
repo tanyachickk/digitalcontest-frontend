@@ -76,6 +76,9 @@ export default class BasicButton extends Vue {
         0 4px 10px rgba(0, 123, 255, 0.25);
     }
   }
+  &.large {
+    padding: 0.725rem 1.5rem;
+  }
   &.small {
     padding: 0.4rem 0.75rem;
     font-size: 0.6875rem;

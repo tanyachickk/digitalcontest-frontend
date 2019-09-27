@@ -49,7 +49,7 @@ export default class PollList extends Vue {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .polls-list {
   &__body {
     flex-grow: 1;

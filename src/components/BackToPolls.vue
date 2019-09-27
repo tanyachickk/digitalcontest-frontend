@@ -11,7 +11,7 @@ import { Component, Vue } from "vue-property-decorator";
 export default class BackToPolls extends Vue {}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .link {
   display: flex;
   align-items: center;
