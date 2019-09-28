@@ -3,10 +3,11 @@
     .poll__row
       .poll__image-wrapper
         img.poll__image(v-if="poll.image" :src="`${baseUrl}${poll.image}`")
+        image-placeholder(v-else :width="60" :height="60" :stroke-width="0.5")
       .poll__content
         .poll__title {{ poll.title }}
         .poll__text {{ poll.text }}
-    .poll__footer
+    .poll__footer(v-if="showControls")
       .poll__show-detail Показать детальную информацию
       button.poll__button(@click="$emit('show-statistic')")
         i.material-icons pie_chart
@@ -19,15 +20,19 @@
 <script lang="ts">
 import { Vue, Prop, Component } from "vue-property-decorator";
 import Card from "@/components/Card.vue";
+import ImagePlaceholder from "@/components/ImagePlaceholder.vue";
 
 @Component({
   components: {
-    Card
+    Card,
+    ImagePlaceholder
   }
 })
 export default class PollsDetail extends Vue {
   @Prop()
   poll;
+  @Prop({ default: true })
+  showControls;
 
   private baseUrl = process.env.VUE_APP_HOST;
 }
@@ -40,11 +45,16 @@ export default class PollsDetail extends Vue {
   margin-bottom: 1rem;
   min-height: 5rem;
   &__image-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100px;
     height: 100px;
     border: 1px solid var(--light-gray);
     margin-right: 1rem;
     border-radius: 5px;
+    color: var(--light-gray);
+    background-color: rgba(0, 0, 0, 0.02);
     overflow: hidden;
   }
   &__image {

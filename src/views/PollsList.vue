@@ -5,7 +5,7 @@
       basic-button.polls-list__button(@click="createPoll")
         i.material-icons.polls-list__button-icon add
         .polls-list__button-text Создать новый опрос
-    .polls-list__body
+    .polls-list__body(v-if="!isLoading")
       card.polls-list__filter
         card-header(slot="header") Фильтр
         card-body
@@ -22,8 +22,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import { Getter, Action } from "vuex-class";
+import { Component, Watch, Vue } from "vue-property-decorator";
+import { State, Getter, Action } from "vuex-class";
 import PageTitle from "@/components/PageTitle.vue";
 import BasicButton from "@/components/BasicButton.vue";
 import Card from "@/components/Card.vue";
@@ -50,11 +50,23 @@ export default class PollList extends Vue {
   private filterSex = null;
   private filterAge = [0, 100];
 
+  @State("isLoading")
+  isLoading;
+
   @Getter("pollsList")
   pollsList;
 
   @Action("deletePoll")
   deletePoll;
+
+  @Watch("isLoading")
+  onChangeIsLoading(value) {
+    if (value) {
+      this.$vs.loading({ color: "#0088bb" });
+    } else {
+      this.$vs.loading.close();
+    }
+  }
 
   get filteredList() {
     return this.pollsList.filter(
@@ -71,6 +83,12 @@ export default class PollList extends Vue {
 
   showStatistic(id) {
     this.$router.push({ path: `/statistic/${id}` });
+  }
+
+  created() {
+    if (this.isLoading) {
+      this.$vs.loading({ color: "#0088bb" });
+    }
   }
 }
 </script>

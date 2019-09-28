@@ -5,7 +5,7 @@
       input.search__input(placeholder="Поиск...")
     .navbar__notifications
       notifications-control
-    .navbar__user(@click="isShowDropdown = !isShowDropdown")
+    .navbar__user(@click="isShowDropdown = !isShowDropdown" v-on-clickaway="closeDropdown")
       user-info(:is-open="isShowDropdown")
       transition(name="slide")
         user-dropdown(v-if="isShowDropdown")
@@ -16,8 +16,12 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import NotificationsControl from "@/components/NotificationsControl.vue";
 import UserInfo from "@/components/UserInfo.vue";
 import UserDropdown from "@/components/UserDropdown.vue";
+import { directive as onClickaway } from "vue-clickaway";
 
 @Component({
+  directives: {
+    onClickaway
+  },
   components: {
     NotificationsControl,
     UserDropdown,
@@ -26,6 +30,10 @@ import UserDropdown from "@/components/UserDropdown.vue";
 })
 export default class Navbar extends Vue {
   private isShowDropdown = false;
+
+  closeDropdown() {
+    this.isShowDropdown = false;
+  }
 }
 </script>
 

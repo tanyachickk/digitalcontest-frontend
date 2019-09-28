@@ -137,11 +137,26 @@ export default class PollEditor extends Vue {
   }
 
   private async uploadPhoto(file) {
+    if (!file) {
+      return;
+    }
+    if (file.size > 3000000) {
+      alert("Размер файла не должен превышать 3MB");
+      this.image = "";
+      return;
+    }
+    this.$vs.loading({ color: "#0088bb" });
     const formData = new FormData();
     formData.append("file", file);
-    const result: any = await upload(formData);
-    console.log(result);
-    this.image = result.href;
+    try {
+      const result: any = await upload(formData);
+      this.image = result.href;
+    } catch (e) {
+      alert("Произошла ошибка при загрузке файла. Попробуйте другой");
+      this.image = "";
+    } finally {
+      this.$vs.loading.close();
+    }
   }
 
   private save() {

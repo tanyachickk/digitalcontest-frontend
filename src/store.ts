@@ -8,9 +8,11 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     polls: {},
+    isLoading: false,
   },
   getters: {
     pollsList: (state) => Object.values(state.polls).sort((a, b) => Number(b.dateCreated) - Number(a.dateCreated)),
+    getPollById: (state: any) => (id: string) => state.polls[id],
   },
   mutations: {
     createPoll(state: any, data: any) {
@@ -37,6 +39,12 @@ export default new Vuex.Store({
         state.polls[poll.id] = poll;
       });
     },
+    setLoading(state: any) {
+      state.isLoading = true;
+    },
+    resetLoading(state: any) {
+      state.isLoading = false;
+    },
   },
   actions: {
     async getData({ dispatch }) {
@@ -47,8 +55,10 @@ export default new Vuex.Store({
       commit('createPoll', result);
     },
     async getPolls({ commit }) {
+      commit('setLoading');
       const result = await getPolls();
       commit('addPolls', result);
+      commit('resetLoading');
     },
     async deletePoll({ commit }, id) {
       deletePoll(id);

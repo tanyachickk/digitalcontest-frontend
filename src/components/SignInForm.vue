@@ -14,6 +14,8 @@
         type="password"
       )
         i.material-icons lock
+    .sign-in__control(v-if="errorMessage")
+      .error-message {{ errorMessage}}
     .sign-in__footer
       basic-button(@click="signIn") Войти
       .sign-in__password-recovery Забыли пароль?
@@ -35,18 +37,27 @@ import { signIn } from "@/api/login";
 })
 export default class SignInForm extends Vue {
   private login: string = "1";
-  private password: string = "2";
+  private password: string = "1";
+  private errorMessage: string = "";
 
   private async signIn() {
-    const result = await signIn(this.login, this.password);
-    console.log(result);
-    this.$router.replace("/");
+    try {
+      this.errorMessage = "";
+      this.$vs.loading({ color: "#0088bb" });
+      const result = await signIn(this.login, this.password);
+      this.$router.replace("/");
+    } catch (e) {
+      this.errorMessage = e;
+    } finally {
+      this.$vs.loading.close();
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .sign-in {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -81,6 +92,11 @@ export default class SignInForm extends Vue {
       color: var(--primary);
       text-decoration: underline;
     }
+  }
+  .error-message {
+    font-size: 13px;
+    color: var(--danger);
+    font-weight: 400;
   }
 }
 </style>
