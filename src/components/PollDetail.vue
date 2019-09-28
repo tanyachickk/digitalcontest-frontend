@@ -9,10 +9,9 @@
         .poll__date {{ pollDate }}
         .poll__tags(v-if="tags")
           .poll__tag(v-for="tag in tags") {{ tag }}
-        
         .poll__text {{ poll.text }}
     .poll__footer(v-if="showControls")
-      .poll__show-detail Показать детальную информацию
+      //- .poll__show-detail Показать детальную информацию
       button.poll__button(@click="$emit('show-statistic')")
         i.material-icons pie_chart
       button.poll__button
@@ -64,6 +63,7 @@ export default class PollsDetail extends Vue {
   margin-bottom: 1rem;
   min-height: 5rem;
   &__image-wrapper {
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -127,7 +127,6 @@ export default class PollsDetail extends Vue {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    margin-top: 0.5rem;
   }
   &__button {
     border: none;
@@ -137,7 +136,7 @@ export default class PollsDetail extends Vue {
     cursor: pointer;
     .material-icons {
       color: var(--gray);
-      font-size: 1.25rem;
+      font-size: 1.1rem;
       &:hover {
         color: var(--primary);
       }

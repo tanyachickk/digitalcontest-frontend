@@ -24,9 +24,16 @@ export default class NewPoll extends Vue {
   @Action("createPoll")
   private createPoll: any;
 
-  create(data: any) {
-    this.createPoll(data);
-    this.$router.push("/polls");
+  async create(data: any) {
+    try {
+      this.$vs.loading({ color: "#0088bb" });
+      await this.createPoll(data);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.$vs.loading.close();
+      this.$router.push("/polls");
+    }
   }
 }
 </script>
