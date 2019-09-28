@@ -7,10 +7,10 @@
             .tab__inputs
               .tab__control.tab__control_title
                 control-label Заголовок опроса*
-                basic-input(size="large")
+                basic-input(v-model="title" size="large")
               .tab__control.tab__control_description
                 control-label Описание*
-                basic-textarea(min-height="6rem")
+                basic-textarea(v-model="text" min-height="6rem")
             .tab__image
               control-label Изображение
               .tab__image-upload
@@ -18,17 +18,20 @@
             a.tab__add-button + Прикрепить видео
             a.tab__add-button + Прикрепить геометку
       tab-content(title="Вопросы" class="mb-5")
-        .tab.tab_questions
-          .tab__control.tab__control_question-title
-            control-label Текст вопроса
-            basic-input.tab__control
-            question-type-control.tab__control(:is-inline="true")
-            question-options.tab__control
+        .tab__question
+          question
+        basic-button.add-question(theme="default" :padding="false" @click="")
+          .add-question__content
+            i.material-icons.add-question__icon add
+            .add-question__text Добавить ещё один вопрос
       tab-content(title="Аудитория" class="mb-5")
-        .tab 3333
+        .tab
+          company-control(:is-inline="true")
+          //- gender-control(:is-inline="true")
+          //- age-control(:is-inline="true")
       basic-button(slot="prev" theme="default") Назад
       basic-button(slot="next") Далее
-      basic-button(slot="finish") Сохранить
+      basic-button(slot="finish" @click="save") Сохранить
     //- .body(slot="body")
     //-   .param
     //-     form-control-label Текст вопроса
@@ -52,9 +55,13 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 import Card from "@/components/Card.vue";
 import ControlLabel from "@/components/FormControlLabel.vue";
 import BasicInput from "@/components/BasicInput.vue";
+import Question from "@/components/Question.vue";
 import BasicTextarea from "@/components/BasicTextarea.vue";
 import BasicButton from "@/components/BasicButton.vue";
 import CardHeader from "@/components/CardHeader.vue";
+import CompanyControl from "@/components/CompanyControl.vue";
+import GenderControl from "@/components/GenderControl.vue";
+import AgeControl from "@/components/AgeControl.vue";
 import { FormWizard, TabContent } from "vue-form-wizard";
 import QuestionTypeControl from "@/components/QuestionTypeControl.vue";
 import QuestionOptions from "@/components/QuestionOptions.vue";
@@ -63,6 +70,7 @@ import "vue-form-wizard/dist/vue-form-wizard.min.css";
 @Component({
   components: {
     Card,
+    Question,
     ControlLabel,
     BasicInput,
     CardHeader,
@@ -71,13 +79,17 @@ import "vue-form-wizard/dist/vue-form-wizard.min.css";
     BasicButton,
     BasicTextarea,
     QuestionTypeControl,
-    QuestionOptions
+    QuestionOptions,
+    CompanyControl,
+    AgeControl,
+    GenderControl
   }
 })
-export default class QuestionModal extends Vue {
+export default class PollEditor extends Vue {
   @Prop()
   private specializations!: any[];
 
+  private title = "";
   private text = "";
   private type = "rating";
   private sex = null;
@@ -90,21 +102,28 @@ export default class QuestionModal extends Vue {
     style: { border: "1px solid #e1e5eb" }
   };
 
-  get questionData() {
+  get pollData() {
     return {
+      title: this.title,
       text: this.text,
-      type: this.type,
-      sex: this.sex,
-      minAge: this.age[0],
-      maxAge: this.age[1],
-      specializations: this.specialization
-        ? this.specialization.map(id => ({ id }))
-        : null
+      questions: []
+      // text: this.text,
+      // type: this.type,
+      // sex: this.sex,
+      // minAge: this.age[0],
+      // maxAge: this.age[1],
+      // specializations: this.specialization
+      //   ? this.specialization.map(id => ({ id }))
+      //   : null
     };
   }
 
+  private save() {
+    this.$emit("save", this.pollData);
+  }
+
   private create() {
-    this.$emit("create", this.questionData, this.options);
+    this.$emit("create", this.pollData, this.options);
     this.$emit("close");
   }
 }
@@ -143,6 +162,11 @@ export default class QuestionModal extends Vue {
 }
 .tab {
   padding: 0 2rem 1rem;
+  &__question {
+    padding-bottom: 1rem;
+    // border-bottom: 1px solid var(--light-gray);
+    margin-bottom: 2rem;
+  }
   &__row {
     display: flex;
     width: 100%;
@@ -207,5 +231,19 @@ export default class QuestionModal extends Vue {
   width: 100%;
   height: 1px;
   background-color: var(--light-gray);
+}
+.add-question {
+  max-width: 250px;
+  margin-bottom: 2rem;
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem 1rem;
+  }
+  &__icon {
+    margin-right: 0.3rem;
+    font-size: 1rem;
+  }
 }
 </style>

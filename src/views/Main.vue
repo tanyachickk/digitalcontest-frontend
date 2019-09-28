@@ -8,8 +8,10 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { Action } from "vuex-class";
 import Sidebar from "@/components/Sidebar.vue";
 import Navbar from "@/components/Navbar.vue";
+import { setToken } from "@/api/axios";
 
 @Component({
   components: {
@@ -18,10 +20,23 @@ import Navbar from "@/components/Navbar.vue";
   }
 })
 export default class Main extends Vue {
+  @Action("getData")
+  getData;
+
   get routes() {
     return (this.$router as any).options.routes[1].children.filter(
       (item: any) => item.meta && item.meta.title
     );
+  }
+
+  private created() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      this.$router.replace("/login");
+      return;
+    }
+    setToken(token);
+    this.getData();
   }
 }
 </script>

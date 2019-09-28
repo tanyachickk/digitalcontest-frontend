@@ -1,30 +1,28 @@
 <template lang="pug">
   .wrapper
-    gender-control.param(:value="sex" @input="$emit('update:sex', $event)")
-    age-control.param(:value="age" @input="$emit('update:age', $event)")
-    //- specialization-control.param(:value="specialization" :list="specializations" @input="$emit('update:specialization', $event)")
+    company-control.param(:value="company" @input="$emit('update:company', $event)")
+    //- gender-control.param(v-if="!company || company === 'person'" :value="sex" @input="$emit('update:sex', $event)")
+    //- age-control.param(v-if="!company || company === 'person'" :value="age" @input="$emit('update:age', $event)")
 </template>
 
 <script lang="ts">
 import { Vue, Prop, Component } from "vue-property-decorator";
+import CompanyControl from "@/components/CompanyControl.vue";
 import GenderControl from "@/components/GenderControl.vue";
 import AgeControl from "@/components/AgeControl.vue";
-// import SpecializationControl from '@/components/SpecializationControl.vue';
 
 @Component({
   components: {
     GenderControl,
-    AgeControl
-    // SpecializationControl,
+    AgeControl,
+    CompanyControl
   }
 })
 export default class PollsFilter extends Vue {
   @Prop()
-  private specializations!: any[];
+  private company!: null | "company" | "person";
   @Prop()
   private sex!: null | "male" | "female";
-  @Prop()
-  private specialization!: number[] | null;
   @Prop()
   private age!: number[] | null;
 }

@@ -1,13 +1,13 @@
 <template lang="pug">
   .field
-    form-control-label Формат ответа
+    form-control-label Пользователь
     .field__controls(:class="isInline && 'inline'")
       radio-button.field__control(
-        v-for="(item, i) in values"
-        :key="i"
-        :is-active="item.key === value"
-        @click="$emit('input', item.key)"
-      ) {{ item.title }}
+        v-for="[key, title] of values"
+        :key="title"
+        :is-active="key === value"
+        @click="$emit('input', key)"
+      ) {{ title }}
 </template>
 
 <script lang="ts">
@@ -21,17 +21,17 @@ import FormControlLabel from "@/components/FormControlLabel.vue";
     FormControlLabel
   }
 })
-export default class QuestionTypeControl extends Vue {
-  @Prop({ default: "rating" })
-  private value!: "rating" | "singleselect" | "comment";
+export default class CompanyControl extends Vue {
+  @Prop({ default: null })
+  private value!: any;
   @Prop({ default: false })
   private isInline!: boolean;
 
-  private values = [
-    { key: "rating", title: "Оценка" },
-    { key: "singleselect", title: "Выбор варианта" },
-    { key: "comment", title: "Комментарий" }
-  ];
+  private values = new Map([
+    [null, "Любой"],
+    ["company", "Юридическое лицо"],
+    ["person", "Физическое лицо"]
+  ]);
 }
 </script>
 

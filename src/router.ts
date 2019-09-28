@@ -52,6 +52,25 @@ export default new Router({
         {
           path: '/statistic',
           component: () => import(/* webpackChunkName: "statistic" */ './views/Statistic.vue'),
+          children: [
+            {
+              path: ':id',
+              component: () => import(/* webpackChunkName: "edit-poll" */ './views/StatisticPoll.vue'),
+              props: true,
+              meta: {
+                title: 'Результаты опроса',
+                icon: 'rate_review',
+              },
+            },
+            {
+              path: '',
+              component: () => import(/* webpackChunkName: "poll-list" */ './views/StatisticList.vue'),
+              meta: {
+                title: 'Статистика',
+                icon: 'rate_review',
+              },
+            },
+          ],
           meta: {
             title: 'Статистика',
             icon: 'pie_chart',

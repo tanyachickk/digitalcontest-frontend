@@ -5,22 +5,28 @@
       input.search__input(placeholder="Поиск...")
     .navbar__notifications
       notifications-control
-    .navbar__user
-      user-info
+    .navbar__user(@click="isShowDropdown = !isShowDropdown")
+      user-info(:is-open="isShowDropdown")
+      transition(name="slide")
+        user-dropdown(v-if="isShowDropdown")
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
-import NotificationsControl from '@/components/NotificationsControl.vue';
-import UserInfo from '@/components/UserInfo.vue';
+import { Component, Prop, Vue } from "vue-property-decorator";
+import NotificationsControl from "@/components/NotificationsControl.vue";
+import UserInfo from "@/components/UserInfo.vue";
+import UserDropdown from "@/components/UserDropdown.vue";
 
 @Component({
   components: {
     NotificationsControl,
-    UserInfo,
-  },
+    UserDropdown,
+    UserInfo
+  }
 })
-export default class Navbar extends Vue {}
+export default class Navbar extends Vue {
+  private isShowDropdown = false;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -33,7 +39,7 @@ export default class Navbar extends Vue {}
   padding: 0;
   background-color: white;
   box-shadow: 0 0.125rem 0.625rem rgba(90, 97, 105, 0.12);
-  // z-index: 1;
+  z-index: 1;
 
   &__search {
     flex-grow: 1;

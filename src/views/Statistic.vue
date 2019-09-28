@@ -1,16 +1,12 @@
 <template lang="pug">
-  div
-    page-title
+  router-view
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import PageTitle from "@/components/PageTitle.vue";
-
-@Component({
-  components: {
-    PageTitle
-  }
-})
+@Component
 export default class Statistic extends Vue {}
 </script>
+
+<style lang="scss" scoped>
+</style>

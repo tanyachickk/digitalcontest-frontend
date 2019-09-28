@@ -1,36 +1,27 @@
 <template lang="pug">
-  .polls-list
+  .statistic
     page-title
-    .polls-list__controls
-      basic-button.polls-list__button(@click="createPoll")
-        i.material-icons.polls-list__button-icon add
-        .polls-list__button-text Создать новый опрос
-    .polls-list__body
-      card.polls-list__filter
+    .statistic__body
+      card.statistic__filter
         card-header(slot="header") Фильтр
         card-body
           polls-filter(
-            :company.sync="filterIsCompany"
             :sex.sync="filterSex"
             :age.sync="filterAge"
           )
-      .polls-list__questions(v-if="pollsList.length")
-        .polls-list__item(v-for="poll in pollsList" :key="poll.id")
-          poll-detail(:poll="poll" @delete="deletePoll(poll.id)" @show-statistic="showStatistic(poll.id)")
+      .statistic__questions(v-if="questions.length")
         //- polls-question-view(v-for="question in filteredQuestions" :key="question.id" :question="question" @edit="isShowModal = true" @delete="deleteQuestion(question.id)")
-      .polls-list__no-questions(v-else) Для выбранной аудитории пока нет ни одного опроса. Создайте опрос или измените параметры фиьтрации
+      .statistic__no-questions(v-else) Для выбранной аудитории пока нет ни одного опроса. Создайте опрос или измените параметры фиьтрации
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { Getter, Action } from "vuex-class";
 import PageTitle from "@/components/PageTitle.vue";
 import BasicButton from "@/components/BasicButton.vue";
 import Card from "@/components/Card.vue";
 import CardHeader from "@/components/CardHeader.vue";
 import CardBody from "@/components/CardBody.vue";
 import PollsFilter from "@/components/PollsFilter.vue";
-import PollDetail from "@/components/PollDetail.vue";
 // import PollsQuestionView from '@/components/PollsQuestionView.vue';
 
 @Component({
@@ -40,38 +31,25 @@ import PollDetail from "@/components/PollDetail.vue";
     Card,
     CardHeader,
     CardBody,
-    PollsFilter,
-    PollDetail
+    PollsFilter
   }
 })
-export default class PollList extends Vue {
+export default class Statistic extends Vue {
   private questions = [];
-  private filterIsCompany = null;
   private filterSex = null;
   private filterAge = [0, 100];
 
-  @Getter("pollsList")
-  pollsList;
-
-  @Action("deletePoll")
-  deletePoll;
-
   createPoll() {
     this.$router.push("/polls/new");
-  }
-
-  showStatistic(id) {
-    this.$router.push({ path: `/statistic/${id}` });
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.polls-list {
+.statistic {
   &__body {
     flex-grow: 1;
-    padding: 1rem 2rem 4rem 24rem;
-    height: 100%;
+    padding: 1.5rem 2rem 2rem 24rem;
     overflow: auto;
   }
   &__filter {
@@ -81,9 +59,6 @@ export default class PollList extends Vue {
     margin-right: 2rem;
     width: 20rem;
     align-self: flex-start;
-  }
-  &__item {
-    margin-bottom: 1.5rem;
   }
   &__questions {
     width: 100%;

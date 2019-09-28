@@ -5,20 +5,17 @@
       basic-input.field__input(:value="options[i]" @enter="onEnter(i)" @input="onInput($event, i)")
       .field__delete-button(v-if="options.length > 1" @click="deleteOption(i)")
         font-awesome-icon(icon="trash-alt")
-    basic-button.field__button(theme="default" :padding="false" @click="addOption")
-      .button
-        i.material-icons.button__icon add
-        .button__text Добавить ещё
+    a.field__button(@click="addOption") + Добавить вариант ответа
 </template>
 
 <script lang="ts">
-import { Vue, Prop, Watch, Component } from 'vue-property-decorator';
-import BasicInput from '@/components/BasicInput.vue';
-import BasicButton from '@/components/BasicButton.vue';
-import FormControlLabel from '@/components/FormControlLabel.vue';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { Vue, Prop, Watch, Component } from "vue-property-decorator";
+import BasicInput from "@/components/BasicInput.vue";
+import BasicButton from "@/components/BasicButton.vue";
+import FormControlLabel from "@/components/FormControlLabel.vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faTrashAlt);
 
@@ -27,18 +24,18 @@ library.add(faTrashAlt);
     BasicInput,
     BasicButton,
     FormControlLabel,
-    FontAwesomeIcon,
-  },
+    FontAwesomeIcon
+  }
 })
 export default class QuestionOptions extends Vue {
-  @Prop({ default: () => [''] })
+  @Prop({ default: () => [""] })
   private value!: string[];
 
   private options = [...this.value];
 
   private onInput(value: string, index: number) {
     this.options[index] = value;
-    this.$emit('input', this.options);
+    this.$emit("input", this.options);
   }
 
   private onEnter(index: number) {
@@ -49,14 +46,14 @@ export default class QuestionOptions extends Vue {
 
   private deleteOption(index: number) {
     this.options.splice(index, 1);
-    this.$emit('input', this.options);
+    this.$emit("input", this.options);
   }
 
   private addOption() {
-    this.options.push('');
-    this.$emit('input', this.options);
+    this.options.push("");
+    this.$emit("input", this.options);
     this.$nextTick(() => {
-      const inputs = this.$el.getElementsByClassName('basic-input__input');
+      const inputs = this.$el.getElementsByClassName("basic-input__input");
       const lastInput = inputs[inputs.length - 1];
       (lastInput as HTMLElement).focus();
     });
@@ -89,6 +86,12 @@ export default class QuestionOptions extends Vue {
   }
   &__button {
     align-self: flex-start;
+    color: var(--primary);
+    font-size: 13px;
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 .button {

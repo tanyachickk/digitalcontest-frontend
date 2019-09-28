@@ -1,5 +1,5 @@
 <template lang="pug">
-  router-link.link(to="polls")
+  router-link.link(to="/polls")
     i.material-icons.link__icon arrow_back
     .link__text Вернуться к опросам
 </template>
