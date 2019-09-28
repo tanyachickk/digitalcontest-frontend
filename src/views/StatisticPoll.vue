@@ -7,7 +7,7 @@
         poll-detail(:poll="currentPoll" :show-controls="false")
       .statistic__results(v-if="questionIds.length")
         .statistic__question(v-for="question in questionsData" :key="question.id")
-          chart-container(:title="question.title")
+          chart-container(:title="question.title" :key="`${question.id}-${answersCount}`")
             rating-chart(v-if="question.type === 'rating'" :rating="statistic[question.id]")
             options-chart(v-if="question.type === 'select'" :options="statistic[question.id]")
 </template>
@@ -44,7 +44,7 @@ import OptionsChart from "@/components/charts/OptionsChart";
   }
 })
 export default class Statistic extends Vue {
-  private statistic = {};
+  private statistic: any = {};
   private isLoading = false;
   private errorMessage = "";
   private timer: any = null;
@@ -66,6 +66,19 @@ export default class Statistic extends Vue {
     return this.currentPoll.questions.filter(
       question => question.type === "select" || question.type === "rating"
     );
+  }
+
+  get answersCount() {
+    if (!this.questionsData.length) {
+      return 0;
+    }
+    let sum = 0;
+    this.questionsData.forEach((data: any) => {
+      Object.values(this.statistic[data.id]).forEach(
+        value => (sum += Number(value))
+      );
+    });
+    return sum;
   }
 
   get questionIds() {
@@ -94,7 +107,7 @@ export default class Statistic extends Vue {
     }
     this.timer = setInterval(async () => {
       this.statistic = await getStatistic(this.id);
-    }, 1000);
+    }, 2000);
   }
 
   beforeDestroy() {
