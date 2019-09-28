@@ -6,6 +6,10 @@
         image-placeholder(v-else :width="60" :height="60" :stroke-width="0.5")
       .poll__content
         .poll__title {{ poll.title }}
+        .poll__date {{ pollDate }}
+        .poll__tags(v-if="tags")
+          .poll__tag(v-for="tag in tags") {{ tag }}
+        
         .poll__text {{ poll.text }}
     .poll__footer(v-if="showControls")
       .poll__show-detail Показать детальную информацию
@@ -21,6 +25,13 @@
 import { Vue, Prop, Component } from "vue-property-decorator";
 import Card from "@/components/Card.vue";
 import ImagePlaceholder from "@/components/ImagePlaceholder.vue";
+import moment from "moment";
+
+const tagsValues: any = new Map([
+  [null, ["Юр. лица", "Физ. лица"]],
+  ["company", ["Юр. лица"]],
+  ["person", ["Физ. лица"]]
+]);
 
 @Component({
   components: {
@@ -35,6 +46,14 @@ export default class PollsDetail extends Vue {
   showControls;
 
   private baseUrl = process.env.VUE_APP_HOST;
+
+  get pollDate() {
+    return moment(+this.poll.dateCreated).format("DD.MM.YYYY HH:mm");
+  }
+
+  get tags() {
+    return tagsValues.get(this.poll.legalType);
+  }
 }
 </script>
 
@@ -76,6 +95,16 @@ export default class PollsDetail extends Vue {
     margin-bottom: 0.5rem;
     margin-right: 3.5rem;
   }
+  &__tags {
+    margin-bottom: 1rem;
+  }
+  &__date {
+    position: relative;
+    font-weight: 400;
+    color: var(--gray);
+    font-size: 12px;
+    margin-right: 3.5rem;
+  }
   &__text {
     position: relative;
     font-weight: 400;
@@ -88,7 +117,6 @@ export default class PollsDetail extends Vue {
     margin-left: 0;
     margin-right: auto;
     color: var(--primary);
-    align-self: flex-end;
     font-size: 12px;
     cursor: pointer;
     &:hover {
@@ -97,8 +125,9 @@ export default class PollsDetail extends Vue {
   }
   &__footer {
     display: flex;
-    justify-content: flex-end;
     align-items: center;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
   }
   &__button {
     border: none;
