@@ -16,7 +16,7 @@
               label.tab__image-upload(for="upload")
                 image-placeholder(v-if="!image" :width="80" :height="80" :stroke-width="0.5")
                 img.tab__image(v-else :src="`${baseUrl}${image}`")
-              input#upload(type="file" accept="image/*" @change="uploadPhoto($event.target.files[0])")
+              input#upload(type="file" accept=".jpg, .jpeg, .png" @change="uploadPhoto($event.target.files[0])")
           .tab__row
             a.tab__add-button + Прикрепить видео
             a.tab__add-button + Прикрепить геометку
