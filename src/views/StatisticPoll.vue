@@ -47,6 +47,7 @@ export default class Statistic extends Vue {
   private statistic = {};
   private isLoading = false;
   private errorMessage = "";
+  private timer: any = null;
 
   @Prop()
   id;
@@ -91,6 +92,13 @@ export default class Statistic extends Vue {
       this.isLoading = false;
       this.$vs.loading.close();
     }
+    this.timer = setInterval(async () => {
+      this.statistic = await getStatistic(this.id);
+    }, 1000);
+  }
+
+  beforeDestroy() {
+    clearInterval(this.timer);
   }
 }
 </script>

@@ -22,8 +22,8 @@ export default class RatingChart extends mixins(HorizontalBar) {
         labels: this.labels,
         datasets: [
           {
-            backgroundColor: 'rgba(25, 136, 255, 0.15)',
-            borderColor: '#349cec',
+            backgroundColor: 'rgba(0, 136, 187, 0.15)',
+            borderColor: '#0088bb',
             borderWidth: 2,
             data: this.values,
           },

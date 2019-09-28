@@ -1,9 +1,17 @@
 import axios from 'axios';
+import Vue from 'vue';
 import { snakeCaseRequest, camelCaseResponse, snakeCaseParams } from '@/utils/axios';
 
 axios.defaults.paramsSerializer = snakeCaseParams;
 axios.defaults.transformRequest = [snakeCaseRequest];
 axios.defaults.transformResponse = [camelCaseResponse];
+
+axios.interceptors.response.use(undefined, (error) => {
+  if (error.request && error.request.status && error.request.status === 401) {
+    Vue.$router.replace('/login');
+  }
+  return Promise.reject(error);
+});
 
 const api = axios.create({
   headers: {
