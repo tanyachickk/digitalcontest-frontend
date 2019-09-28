@@ -11,9 +11,12 @@
               .tab__control.tab__control_description
                 control-label Описание*
                 basic-textarea(v-model="text" min-height="6rem")
-            .tab__image
+            .tab__image-wrapper
               control-label Изображение
-              .tab__image-upload
+              label.tab__image-upload(for="upload")
+                image-placeholder(v-if="!image" :width="80" :height="80" :stroke-width="0.5")
+                img.tab__image(v-else :src="`${baseUrl}${image}`")
+              input#upload(type="file" accept="image/*" @change="uploadPhoto($event.target.files[0])")
           .tab__row
             a.tab__add-button + Прикрепить видео
             a.tab__add-button + Прикрепить геометку
@@ -65,6 +68,8 @@ import AgeControl from "@/components/AgeControl.vue";
 import { FormWizard, TabContent } from "vue-form-wizard";
 import QuestionTypeControl from "@/components/QuestionTypeControl.vue";
 import QuestionOptions from "@/components/QuestionOptions.vue";
+import ImagePlaceholder from "@/components/ImagePlaceholder.vue";
+import { upload } from "@/api/upload";
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
 
 const question = {
@@ -88,7 +93,8 @@ const question = {
     QuestionOptions,
     CompanyControl,
     AgeControl,
-    GenderControl
+    GenderControl,
+    ImagePlaceholder
   }
 })
 export default class PollEditor extends Vue {
@@ -103,6 +109,8 @@ export default class PollEditor extends Vue {
   private age = [0, 100];
   private questions = [{ ...question }];
   private legalType = null;
+  private image = "";
+  private baseUrl = process.env.VUE_APP_HOST;
 
   private dotOptions = {
     tooltip: "always",
@@ -113,6 +121,7 @@ export default class PollEditor extends Vue {
     return {
       title: this.title,
       text: this.text,
+      image: this.image,
       questions: this.questions,
       legalType: this.legalType
     };
@@ -125,6 +134,14 @@ export default class PollEditor extends Vue {
 
   private addQuestion() {
     this.questions.push({ ...question });
+  }
+
+  private async uploadPhoto(file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    const result: any = await upload(formData);
+    console.log(result);
+    this.image = result.href;
   }
 
   private save() {
@@ -183,15 +200,33 @@ export default class PollEditor extends Vue {
   &__inputs {
     flex-grow: 1;
   }
-  &__image {
+  &__image-wrapper {
     margin-left: 1.5rem;
     flex-shrink: 0;
+    color: var(--light-gray);
+  }
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
   }
   &__image-upload {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
     width: 180px;
     height: 180px;
     border: 1px solid var(--light-gray);
+    overflow: hidden;
     border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.025);
+    cursor: pointer;
+    .material-icons {
+      font-size: 5rem;
+      color: var(--light-gray);
+    }
   }
   &__control {
     &:not(:last-child) {
@@ -254,5 +289,8 @@ export default class PollEditor extends Vue {
     margin-right: 0.3rem;
     font-size: 1rem;
   }
+}
+#upload {
+  display: none;
 }
 </style>

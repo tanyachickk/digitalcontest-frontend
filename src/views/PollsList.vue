@@ -10,12 +10,12 @@
         card-header(slot="header") Фильтр
         card-body
           polls-filter(
-            :company.sync="filterIsCompany"
+            :company.sync="legalType"
             :sex.sync="filterSex"
             :age.sync="filterAge"
           )
-      .polls-list__questions(v-if="pollsList.length")
-        .polls-list__item(v-for="poll in pollsList" :key="poll.id")
+      .polls-list__questions(v-if="filteredList.length")
+        .polls-list__item(v-for="poll in filteredList" :key="poll.id")
           poll-detail(:poll="poll" @delete="deletePoll(poll.id)" @show-statistic="showStatistic(poll.id)")
         //- polls-question-view(v-for="question in filteredQuestions" :key="question.id" :question="question" @edit="isShowModal = true" @delete="deleteQuestion(question.id)")
       .polls-list__no-questions(v-else) Для выбранной аудитории пока нет ни одного опроса. Создайте опрос или измените параметры фиьтрации
@@ -46,7 +46,7 @@ import PollDetail from "@/components/PollDetail.vue";
 })
 export default class PollList extends Vue {
   private questions = [];
-  private filterIsCompany = null;
+  private legalType = null;
   private filterSex = null;
   private filterAge = [0, 100];
 
@@ -55,6 +55,15 @@ export default class PollList extends Vue {
 
   @Action("deletePoll")
   deletePoll;
+
+  get filteredList() {
+    return this.pollsList.filter(
+      poll =>
+        this.legalType === null ||
+        poll.legalType === null ||
+        poll.legalType === this.legalType
+    );
+  }
 
   createPoll() {
     this.$router.push("/polls/new");

@@ -1,7 +1,8 @@
 <template lang="pug">
   .login-page
     .login-page__form
-      login-form
+      transition(name="slide-up" apear)
+        login-form
 </template>
 
 <script lang="ts">
@@ -32,5 +33,8 @@ export default class Login extends Vue {}
     left: 50%;
     transform: translate(-50%, -50%);
   }
+}
+
+.slide-up {
 }
 </style>

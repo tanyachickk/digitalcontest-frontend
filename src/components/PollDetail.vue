@@ -1,7 +1,8 @@
 <template lang="pug">
   card.poll
     .poll__row
-      .poll__image
+      .poll__image-wrapper
+        img.poll__image(v-if="poll.image" :src="`${baseUrl}${poll.image}`")
       .poll__content
         .poll__title {{ poll.title }}
         .poll__text {{ poll.text }}
@@ -27,6 +28,8 @@ import Card from "@/components/Card.vue";
 export default class PollsDetail extends Vue {
   @Prop()
   poll;
+
+  private baseUrl = process.env.VUE_APP_HOST;
 }
 </script>
 
@@ -36,11 +39,19 @@ export default class PollsDetail extends Vue {
   padding: 1rem;
   margin-bottom: 1rem;
   min-height: 5rem;
-  &__image {
+  &__image-wrapper {
     width: 100px;
     height: 100px;
     border: 1px solid var(--light-gray);
     margin-right: 1rem;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
   }
   &__content {
     flex-grow: 1;
