@@ -10,11 +10,12 @@ export default new Vuex.Store({
     polls: {},
   },
   getters: {
-    pollsList: (state) => Object.values(state.polls),
+    pollsList: (state) => Object.values(state.polls).sort((a, b) => Number(b.dateCreated) - Number(a.dateCreated)),
   },
   mutations: {
     createPoll(state: any, data: any) {
       state.polls[data.newPoll.id] = data.newPoll;
+      state.polls = { ...state.polls };
     },
     deletePoll(state: any, id: string) {
       delete state.polls[id];

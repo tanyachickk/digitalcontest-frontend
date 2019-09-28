@@ -24,7 +24,7 @@ import Card from "@/components/Card.vue";
     Card
   }
 })
-export default class PollsFilter extends Vue {
+export default class PollsDetail extends Vue {
   @Prop()
   poll;
 }

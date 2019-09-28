@@ -26,6 +26,7 @@ export default class NewPoll extends Vue {
 
   create(data: any) {
     this.createPoll(data);
+    this.$router.push("/polls");
   }
 }
 </script>

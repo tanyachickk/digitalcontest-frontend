@@ -18,15 +18,15 @@
             a.tab__add-button + Прикрепить видео
             a.tab__add-button + Прикрепить геометку
       tab-content(title="Вопросы" class="mb-5")
-        .tab__question
-          question
-        basic-button.add-question(theme="default" :padding="false" @click="")
+        .tab__question(v-for="(question, i) in questions")
+          question(:question="question" @update="updateQuestion(i, $event)")
+        basic-button.add-question(theme="default" :padding="false" @click="addQuestion")
           .add-question__content
             i.material-icons.add-question__icon add
             .add-question__text Добавить ещё один вопрос
       tab-content(title="Аудитория" class="mb-5")
         .tab
-          company-control(:is-inline="true")
+          company-control(:value="legalType" :is-inline="true" @input="legalType = $event")
           //- gender-control(:is-inline="true")
           //- age-control(:is-inline="true")
       basic-button(slot="prev" theme="default") Назад
@@ -67,6 +67,12 @@ import QuestionTypeControl from "@/components/QuestionTypeControl.vue";
 import QuestionOptions from "@/components/QuestionOptions.vue";
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
 
+const question = {
+  title: "",
+  type: "rating",
+  options: []
+};
+
 @Component({
   components: {
     Card,
@@ -95,7 +101,8 @@ export default class PollEditor extends Vue {
   private sex = null;
   private specialization: null | number[] = null;
   private age = [0, 100];
-  private options = [""];
+  private questions = [{ ...question }];
+  private legalType = null;
 
   private dotOptions = {
     tooltip: "always",
@@ -106,16 +113,18 @@ export default class PollEditor extends Vue {
     return {
       title: this.title,
       text: this.text,
-      questions: []
-      // text: this.text,
-      // type: this.type,
-      // sex: this.sex,
-      // minAge: this.age[0],
-      // maxAge: this.age[1],
-      // specializations: this.specialization
-      //   ? this.specialization.map(id => ({ id }))
-      //   : null
+      questions: this.questions,
+      legalType: this.legalType
     };
+  }
+
+  private updateQuestion(i: number, value: any) {
+    this.questions[i] = { ...value };
+    this.questions = [...this.questions];
+  }
+
+  private addQuestion() {
+    this.questions.push({ ...question });
   }
 
   private save() {

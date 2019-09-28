@@ -23,13 +23,13 @@ import FormControlLabel from "@/components/FormControlLabel.vue";
 })
 export default class QuestionTypeControl extends Vue {
   @Prop({ default: "rating" })
-  private value!: "rating" | "singleselect" | "comment";
+  private value!: "rating" | "select" | "comment";
   @Prop({ default: false })
   private isInline!: boolean;
 
   private values = [
     { key: "rating", title: "Оценка" },
-    { key: "singleselect", title: "Выбор варианта" },
+    { key: "select", title: "Выбор варианта" },
     { key: "comment", title: "Комментарий" }
   ];
 }

@@ -2,11 +2,11 @@
   .question
     .question__row
       control-label Текст вопроса
-      basic-input.question__control
+      basic-input.question__control(:value="question.title" @input="onChangeTitle")
     .question__row
-      question-type-control.question__control(:is-inline="true")
+      question-type-control.question__control(:value="question.type" :is-inline="true" @input="onChangeType")
     .question__row
-      question-options.question__control
+      question-options.question__control(v-if="question.type === 'select'" :value="question.options" @input="onChangeOptions")
 </template>
 
 <script lang="ts">
@@ -27,6 +27,18 @@ import BasicInput from "@/components/BasicInput.vue";
 export default class Question extends Vue {
   @Prop()
   question;
+
+  onChangeTitle(value) {
+    this.$emit("update", { ...this.question, title: value });
+  }
+
+  onChangeType(value) {
+    this.$emit("update", { ...this.question, type: value });
+  }
+
+  onChangeOptions(value) {
+    this.$emit("update", { ...this.question, options: value });
+  }
 }
 </script>
 
